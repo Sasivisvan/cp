@@ -19,7 +19,7 @@ for _ in range(t):
                     arr[i]=1
                 else :
                     if (arr[i]==0 and arr[i+1]==0 and arr[i-1]!=1):
-                        arr[i] = 
+                        arr[i] = 1
         print(arr)
         print(arr.count(1))
     
