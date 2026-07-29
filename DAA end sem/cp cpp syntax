@@ -1,0 +1,267 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+#include <queue>
+#include <stack>
+#include <deque>
+#include <algorithm> // For sort, reverse, lower_bound, etc.
+#include <numeric>   // For accumulate, gcd, lcm
+#include <cmath>     // For pow, sqrt, log
+#include <tuple>     // For tuples
+//instead of all these you can use #include <bits/stdc++.h>
+#include <bits/stdc++.h>
+
+
+using namespace std;
+
+// ==========================================
+// 1. PAIRS & TUPLES
+// ==========================================
+void learnPairsAndTuples() {
+    cout << "--- Pairs & Tuples ---\n";
+    // Pairs store exactly 2 values of potentially different types
+    pair<int, string> p1 = {1, "Alice"};
+    pair<int, string> p2 = make_pair(2, "Bob");
+    
+    cout << "Pair 1: " << p1.first << ", " << p1.second << "\n";
+
+    // Tuples store 3 or more values
+    tuple<int, string, double> t1 = {1, "Charlie", 3.14};
+    tuple<int, string, double> t2 = make_tuple(2, "Dave", 1.618);
+    
+    // Accessing tuple elements (must use constant index at compile time)
+    cout << "Tuple 1: " << get<0>(t1) << ", " << get<1>(t1) << ", " << get<2>(t1) << "\n";
+
+    // Modern C++ feature: Structured Binding (Very useful for CP!)
+    auto [id, name, value] = t1; 
+    cout << "Extracted: " << name << " has value " << value << "\n\n";
+}
+
+// ==========================================
+// 2. SEQUENCE CONTAINERS (Vector, Deque)
+// ==========================================
+void learnVectorsAndDeques() {
+    cout << "--- Vectors & Deques ---\n";
+    // VECTOR (Dynamic Array) - O(1) random access
+    vector<int> v = {10, 20, 30};
+    v.push_back(40); // Adds to end - O(1)
+    v.pop_back();    // Removes from end - O(1)
+    
+    // Iterating using range-based for loop (Modern C++)
+    cout << "Vector: ";
+    for (int x : v) cout << x << " "; 
+    cout << "\nSize: " << v.size() << "\n";
+
+    // --- Removing from specific index or by value ---
+    vector<int> v2 = {10, 20, 30, 40, 50, 30};
+    
+    // 1. Remove by Index (e.g., index 2) - O(N) time complexity
+    v2.erase(v2.begin() + 2); // Removes '30' at index 2. Vector is now {10, 20, 40, 50, 30}
+    
+    // 2. Remove first occurrence of a Value (e.g., value 40) - O(N)
+    auto it = find(v2.begin(), v2.end(), 40);
+    if (it != v2.end()) v2.erase(it); // Vector is now {10, 20, 50, 30}
+    
+    // 3. Remove ALL occurrences of a Value (Erase-Remove Idiom) - O(N)
+    v2.erase(remove(v2.begin(), v2.end(), 30), v2.end()); // Removes all '30's. Vector is now {10, 20, 50}
+
+    v.resize(5, 100); // Resizes to 5 elements, fills new ones with 100
+    v.clear();        // Empties the vector - O(N)
+
+    // DEQUE (Double Ended Queue) - O(1) insertion/deletion at BOTH ends
+    deque<int> dq;
+    dq.push_back(10);  // [10]
+    dq.push_front(20); // [20, 10]
+    dq.push_back(30);  // [20, 10, 30]
+    dq.pop_front();    // [10, 30]
+    cout << "Deque front: " << dq.front() << ", back: " << dq.back() << "\n\n";
+}
+
+// ==========================================
+// 3. CONTAINER ADAPTORS (Stack, Queue, PQ)
+// ==========================================
+void learnStacksAndQueues() {
+    cout << "--- Stacks, Queues, Priority Queues ---\n";
+    // STACK (LIFO - Last In First Out)
+    stack<int> st;
+    st.push(1);
+    st.push(2);
+    cout << "Stack top: " << st.top() << "\n"; // Prints 2
+    st.pop(); // Removes 2
+
+    // QUEUE (FIFO - First In First Out)
+    queue<int> q;
+    q.push(10);
+    q.push(20);
+    cout << "Queue front: " << q.front() << "\n"; // Prints 10
+    q.pop(); // Removes 10
+
+    // PRIORITY QUEUE (Max-Heap by default) - O(log N) insertion/extraction
+    priority_queue<int> pq_max;
+    pq_max.push(5);
+    pq_max.push(10);
+    pq_max.push(2);
+    cout << "Max PQ top: " << pq_max.top() << "\n"; // Prints 10
+
+    // PRIORITY QUEUE (Min-Heap) - *CRUCIAL TO MEMORIZE SYNTAX*
+    priority_queue<int, vector<int>, greater<int>> pq_min;
+    pq_min.push(5);
+    pq_min.push(10);
+    pq_min.push(2);
+    cout << "Min PQ top: " << pq_min.top() << "\n\n"; // Prints 2
+}
+
+// ==========================================
+// 4. ASSOCIATIVE CONTAINERS (Sets, Maps)
+// ==========================================
+void learnSetsAndMaps() {
+    cout << "--- Sets & Maps ---\n";
+    // SET (Ordered, Unique elements, based on Red-Black Tree) - O(log N)
+    set<int> s = {3, 1, 4, 1, 5}; // Will store as {1, 3, 4, 5}
+    s.insert(9);
+    s.erase(3);
+    
+    cout << "Set contains 4? " << (s.count(4) ? "Yes" : "No") << "\n"; // count() returns 1 or 0
+    
+    // Iterator approach to find element
+    auto it = s.find(5); 
+    if (it != s.end()) cout << "Found 5!\n";
+
+    // MAP (Ordered Key-Value pairs, Unique keys) - O(log N)
+    map<string, int> m;
+    m["apple"] = 5;
+    m["banana"] = 10;
+    m.insert({"cherry", 15});
+
+    cout << "Map elements:\n";
+    for (auto const& [key, val] : m) { // Structured binding iteration
+        cout << "  " << key << " -> " << val << "\n";
+    }
+
+    // UNORDERED SET & MAP (Based on Hash Tables) - O(1) average time!
+    // *Use these instead of set/map in HackerRank to avoid Time Limit Exceeded*
+    unordered_map<int, string> umap;
+    umap[1] = "One";
+    cout << "Unordered Map value: " << umap[1] << "\n\n";
+}
+
+// ==========================================
+// 5. STRINGS
+// ==========================================
+void learnStrings() {
+    cout << "--- Strings ---\n";
+    string s1 = "Hello";
+    string s2 = "World";
+    
+    string s3 = s1 + " " + s2; // Concatenation
+    s3.push_back('!');         // Add char to end
+    cout << "String: " << s3 << "\n";
+
+    // Substring: substr(starting_index, length)
+    cout << "Substring: " << s3.substr(0, 5) << "\n"; // Prints "Hello"
+
+    // Find a substring inside a string
+    size_t pos = s3.find("World");
+    if (pos != string::npos) { // string::npos means "not found"
+        cout << "'World' found at index: " << pos << "\n";
+    }
+
+    // Conversions
+    string num_str = "1234";
+    int num = stoi(num_str); // String to Int (use stoll for long long)
+    string back_to_str = to_string(num * 2); 
+    cout << "Math on converted string: " << back_to_str << "\n\n";
+}
+
+// ==========================================
+// 6. ALGORITHMS & CUSTOM COMPARATORS
+// ==========================================
+// Custom comparator: Sort pairs primarily by 2nd element descending
+bool customCompare(pair<int, int> a, pair<int, int> b) {
+    if (a.second == b.second) return a.first < b.first; // Tie breaker
+    return a.second > b.second; 
+}
+
+void learnAlgorithms() {
+    cout << "--- STL Algorithms ---\n";
+    vector<int> v = {4, 2, 5, 1, 3};
+    
+    // Sorting (O(N log N))
+    sort(v.begin(), v.end()); // Ascending
+    sort(v.rbegin(), v.rend()); // Descending using reverse iterators
+    
+    // Min/Max/Sum
+    int mx = *max_element(v.begin(), v.end());
+    int mn = *min_element(v.begin(), v.end());
+    int sum = accumulate(v.begin(), v.end(), 0); // 0 is initial sum
+    cout << "Max: " << mx << ", Min: " << mn << ", Sum: " << sum << "\n";
+
+    // Reversing
+    reverse(v.begin(), v.end());
+
+    // Binary Search (Array MUST be sorted first) O(log N)
+    sort(v.begin(), v.end()); // v is now {1, 2, 3, 4, 5}
+    bool exists = binary_search(v.begin(), v.end(), 3);
+    
+    // Lower/Upper Bound (Very Important for HackerRank!)
+    // lower_bound returns iterator to first element >= target
+    auto lb = lower_bound(v.begin(), v.end(), 3); 
+    // upper_bound returns iterator to first element > target
+    auto ub = upper_bound(v.begin(), v.end(), 3); 
+    
+    cout << "Lower bound of 3 is at index: " << distance(v.begin(), lb) << "\n";
+    
+    // Custom Sorting Example
+    vector<pair<int, int>> vec_pairs = {{1, 10}, {2, 50}, {3, 10}};
+    sort(vec_pairs.begin(), vec_pairs.end(), customCompare);
+    cout << "Custom sorted pairs: ";
+    for(auto p : vec_pairs) cout << "{" << p.first << "," << p.second << "} ";
+    cout << "\n\n";
+}
+
+// ==========================================
+// 7. MATH & BIT MANIPULATION
+// ==========================================
+void learnMathAndBits() {
+    cout << "--- Math & Bit Manipulation ---\n";
+    // Standard Math
+    cout << "Power (2^3): " << pow(2, 3) << "\n";
+    cout << "Square root (16): " << sqrt(16) << "\n";
+    
+    // GCD and LCM (Requires C++17)
+    cout << "GCD(12, 18): " << gcd(12, 18) << "\n";
+    cout << "LCM(12, 18): " << lcm(12, 18) << "\n";
+
+    // Bit Manipulation
+    int n = 29; // Binary: 11101
+    cout << "Number of 1-bits in 29: " << __builtin_popcount(n) << "\n";
+    cout << "Is 16 a power of 2? " << ((16 & (16 - 1)) == 0 ? "Yes" : "No") << "\n\n";
+}
+
+// ==========================================
+// MAIN FUNCTION (Entry Point)
+// ==========================================
+int main() {
+    // FAST I/O - Always include these two lines at the top of main in HackerRank!
+    // They disable synchronization between C and C++ standard streams to make cin/cout lightning fast.
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    cout << "=== C++ COMPETITIVE PROGRAMMING CHEATSHEET ===\n\n";
+    
+    // Call the learning functions one by one
+    // You can comment these out as you study specific topics
+    learnPairsAndTuples();
+    learnVectorsAndDeques();
+    learnStacksAndQueues();
+    learnSetsAndMaps();
+    learnStrings();
+    learnAlgorithms();
+    learnMathAndBits();
+
+    return 0;
+}
