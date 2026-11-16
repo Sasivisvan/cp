@@ -1,1 +1,23 @@
 .vscode/
+cpbook.pdf
+python_syntax.md
+python_syntax_full.md
+
+# compiled binaries
+a
+a.out
+*.out
+codeforces/randoms/2000
+codeforces/randoms/drift
+codeforces/week5/raytracer
+trash/DAA end sem/*
+!trash/DAA end sem/*.*
+
+# generated images
+*.ppm
+
+# university-issued activity sheets (not mine to publish)
+trash/CARE/**/Activity*.pdf
+
+# local shell config copy
+trash/CARE/mybash.sh
